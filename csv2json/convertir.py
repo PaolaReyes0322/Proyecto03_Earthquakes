@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 CARPETA = Path(__file__).parent
-ENTRADA = CARPETA / "global_earthquakes_2023_2026_limpio.csv"
+ENTRADA = CARPETA / "sismos_2023_2026.csv"
 SALIDA = CARPETA / "earthquakes.json"
 
 # Orden de columnas y tipo esperado de cada una

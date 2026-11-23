@@ -12,7 +12,7 @@ export default function DepthMagScatter({ points, strongThreshold = 7
         strongThreshold).length;
     return (
         <ChartPlaceholder
-            label={`Dispersión (Sprint 3): ${points.length} puntos,
+            label={`Dispersión: ${points.length} puntos,
 ${fuertes} con M ≥ ${strongThreshold}`}
         />
     );

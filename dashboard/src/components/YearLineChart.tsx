@@ -10,7 +10,7 @@ interface YearLineChartProps {
 export default function YearLineChart({ data, selectedYear }:
     YearLineChartProps) {
     return (
-        <ChartPlaceholder label="Gráfico de líneas (Sprint 3)">
+        <ChartPlaceholder label="Sismos por año">
             <Stack direction="row" spacing={1} useFlexGap sx={{
                 flexWrap:
                     'wrap', justifyContent: 'center'

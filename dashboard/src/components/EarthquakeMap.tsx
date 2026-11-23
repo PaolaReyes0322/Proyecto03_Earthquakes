@@ -7,5 +7,5 @@ interface EarthquakeMapProps {
 }
 
 export default function EarthquakeMap({ points, height = 320 }: EarthquakeMapProps) {
-  return <ChartPlaceholder height={height} label={`Mapa mundial (Sprint 3): ${points.length} sismos a dibujar`} />;
+  return <ChartPlaceholder height={height} label={`Mapa mundial: ${points.length} sismos a dibujar`} />;
 }

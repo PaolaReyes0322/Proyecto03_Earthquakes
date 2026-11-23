@@ -12,7 +12,7 @@ interface KpiCardProps {
 export default function KpiCard({ label, value, subtitle, icon, color
 }: KpiCardProps) {
     return (
-        <Paper sx={{ p: 2, display: 'flex', justifyContent: 'spacebetween', alignItems: 'center', height: '100%' }}>
+        <Paper sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
             <Box>
                 <Typography variant="body2"
                     color="text.secondary">{label}</Typography>

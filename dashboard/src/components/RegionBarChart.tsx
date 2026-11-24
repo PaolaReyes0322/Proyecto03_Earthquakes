@@ -1,5 +1,5 @@
-import { Box, LinearProgress, Stack, Typography } from
-    '@mui/material';
+import { BarChart } from '@mui/x-charts/BarChart';
+import { Typography } from '@mui/material';
 import type { RegionCount } from '../types';
 
 interface RegionBarChartProps {
@@ -7,24 +7,20 @@ interface RegionBarChartProps {
     limit?: number;
 }
 
-export default function RegionBarChart({ data, limit = 10 }:
-    RegionBarChartProps) {
-    const items = data.slice(0, limit);
-    const max = items.length ? items[0].count : 1;
-    if (!items.length) {
-        return <Typography color="text.secondary">No hay registros con los
-            filtros elegidos.</Typography>;
-    }
-    return (
-        <Stack spacing={1}>
-            {items.map((item) => (
-                <Box key={item.region}>
-                    <Typography variant="caption">{item.region}
-                        ({item.count})</Typography>
-                    <LinearProgress variant="determinate" value={(item.count /
-                        max) * 100} sx={{ height: 8, borderRadius: 4 }} />
-                </Box>
-            ))}
-        </Stack>
-    );
+export default function RegionBarChart({ data, limit = 10 }: RegionBarChartProps) {
+  const items = data.slice(0, limit);
+
+  if (!items.length) {
+    return <Typography color="text.secondary">No hay registros con los filtros elegidos.</Typography>;
+  }
+
+  return (
+    <BarChart
+      height={320}
+      layout="horizontal"
+      margin={{ left: 130 }}
+      series={[{ data: items.map((i) => i.count), label: 'Sismos' }]}
+      yAxis={[{ scaleType: 'band', data: items.map((i) => i.region) }]}
+    />
+  );
 }

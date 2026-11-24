@@ -1,122 +1,113 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useMemo, useState } from 'react';
+import { Container, Grid, Stack, useMediaQuery, useTheme } from '@mui/material';
+import PublicIcon from '@mui/icons-material/Public';
+import SpeedIcon from '@mui/icons-material/Speed';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import earthquakesData from './data/earthquakes.json';
+import { filtrarSismos } from './utils/filtrarSismos';
+import type { Earthquake, KpiItem, MagRange, YearFilter } from './types';
+import HeroSection from './components/HeroSection';
+import FilterPanel from './components/FilterPanel';
+import ChartCard from './components/ChartCard';
+import YearLineChart from './components/YearLineChart';
+import RegionBarChart from './components/RegionBarChart';
+import DepthMagScatter from './components/DepthMagScatter';
+import EarthquakeTable from './components/EarthquakeTable';
+import Footer from './components/Footer';
 
-function App() {
-  const [count, setCount] = useState(0)
+const sismos = earthquakesData as unknown as Earthquake[];
+const yearOptions: YearFilter[] = [
+  'Todos',
+  ...[...new Set(sismos.map((e) => e.year))].sort(),
+];
+
+export default function App() {
+  const theme = useTheme();
+  const esMovil = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Estado de los filtros (useState)
+  const [year, setYear] = useState<YearFilter>('Todos');
+  const [magRange, setMagRange] = useState<MagRange>([5, 9]);
+
+  // Cada vez que cambia un filtro se recalculan los datos
+  const r = useMemo(() => filtrarSismos(sismos, year, magRange), [year, magRange]);
+
+  const kpis: KpiItem[] = [
+    {
+      label: 'Total de sismos',
+      value: r.total.toLocaleString('en-US'),
+      subtitle: `M ${magRange[0].toFixed(1)} – ${magRange[1].toFixed(1)}`,
+      icon: <PublicIcon fontSize="large" />,
+      color: '#38BDF8',
+    },
+    {
+      label: 'Magnitud promedio',
+      value: r.total ? r.promedio.toFixed(2) : '—',
+      subtitle: 'Escala de magnitud',
+      icon: <SpeedIcon fontSize="large" />,
+      color: '#38BDF8',
+    },
+    {
+      label: 'Magnitud máxima',
+      value: r.maximo ? r.maximo.mag.toFixed(1) : '—',
+      subtitle: r.maximo
+        ? `${r.maximo.place} · ${r.maximo.time.slice(0, 10)}`
+        : 'Sin registros',
+      icon: <WarningAmberIcon fontSize="large" />,
+      color: '#F97316',
+    },
+  ];
+
+  const irAGraficos = () =>
+    document.getElementById('graficos')?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Stack spacing={3}>
+        <HeroSection
+          title="Dashboard de Monitoreo de Actividad Sísmica Global 2023-2026"
+          subtitle="Explora dónde, cuándo y con qué fuerza ocurren los terremotos de magnitud 5.0 o superior."
+          badgeText="Datos: Kaggle · M ≥ 5.0"
+          ctaLabel="Ver dashboard"
+          onCtaClick={irAGraficos}
+          kpis={kpis}
+          mapPoints={r.filtrados}
+        />
 
-      <div className="ticks"></div>
+        <FilterPanel
+          year={year}
+          magRange={magRange}
+          yearOptions={yearOptions}
+          onYearChange={setYear}
+          onMagRangeChange={setMagRange}
+          collapsible={esMovil}
+        />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <Grid container spacing={3} id="graficos">
+          <Grid size={{ xs: 12, md: 7 }}>
+            <ChartCard title="Sismos por año" note="*2026 hasta el 14 de julio">
+              <YearLineChart data={r.porAnio} selectedYear={year} />
+            </ChartCard>
+          </Grid>
+          <Grid size={{ xs: 12, md: 5 }}>
+            <ChartCard title="Top 10 regiones con más sismos">
+              <RegionBarChart data={r.porRegion} limit={10} />
+            </ChartCard>
+          </Grid>
+          <Grid size={{ xs: 12, md: 5 }}>
+            <ChartCard title="Profundidad vs. magnitud">
+              <DepthMagScatter points={r.filtrados} strongThreshold={7} />
+            </ChartCard>
+          </Grid>
+          <Grid size={{ xs: 12, md: 7 }}>
+            <ChartCard title="Sismos más fuertes registrados">
+              <EarthquakeTable rows={r.masFuertes} limit={6} />
+            </ChartCard>
+          </Grid>
+        </Grid>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        <Footer text="Fuente de datos: Kaggle, Global Earthquakes 2020-2026 (Neave, 2026)." />
+      </Stack>
+    </Container>
+  );
 }
-
-export default App

@@ -1,27 +1,32 @@
-import { useEffect, useState } from "react";
-import { obtenerEarthquake } from "../services/earthquakeService";
-import type { Earthquake } from "../types/index";
+import { useEffect, useState } from 'react';
+import { obtenerSismos } from '../services/earthquakeService';
+import type { Earthquake } from '../types';
 
-export default function useFetchData( place: string ) {
-
-  const [clima, setClima] = useState<Clima | null>(null);
+export default function useFetchData() {
+  const [sismos, setSismos] = useState<Earthquake[]>([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-
-    if (!ciudad) {
-      return;
-    }
+    let activo = true;
 
     async function cargarDatos() {
-
-      const datos = await obtenerClima(`clima/${ciudad}`);
-
-      setClima(datos);
+      try {
+        const datos = await obtenerSismos();
+        if (activo) setSismos(datos);
+      } catch (e) {
+        if (activo) setError(e instanceof Error ? e.message : 'Error desconocido');
+      } finally {
+        if (activo) setCargando(false);
+      }
     }
 
     cargarDatos();
 
-  }, [ciudad]);
+    return () => {
+      activo = false;
+    };
+  }, []);
 
-  return { clima }
+  return { sismos, cargando, error };
 }

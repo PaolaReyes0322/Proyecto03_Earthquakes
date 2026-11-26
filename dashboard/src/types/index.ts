@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 export interface Earthquake {
+  id: string;
   time: string;
   year: number;
   latitude: number;

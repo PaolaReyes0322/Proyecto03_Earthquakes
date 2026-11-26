@@ -17,9 +17,9 @@ export default function MagnitudeRangeSlider({ value, min = 5, max = 9, step = 0
       </Typography>
       <Slider
         value={value}
-        min={min}
-        max={max}
-        step={step}
+        min={5}
+        max={9}
+        step={0.5}
         marks
         disableSwap
         valueLabelDisplay="auto"

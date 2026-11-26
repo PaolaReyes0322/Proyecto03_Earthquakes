@@ -1,6 +1,6 @@
 import { get, ref } from "firebase/database";
 import { database } from "../firebase/firebase";
-import type { Earthquake } from "../types/index";
+import type { Earthquake } from "../types";
 
 export async function obtenerSismos(): Promise<Earthquake[]> {
   const snapshot = await get(ref(database, 'earthquakes'));

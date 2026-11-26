@@ -2,15 +2,12 @@ import { get, ref } from "firebase/database";
 import { database } from "../firebase/firebase";
 import type { Earthquake } from "../types/index";
 
-export async function obtenerEarthquake( collection: string ): Promise<Earthquake | null> {
+export async function obtenerSismos(): Promise<Earthquake[]> {
+  const snapshot = await get(ref(database, 'earthquakes'));
 
-  const referencia = ref(database, `${collection}`);
-
-  const snapshot = await get(referencia);
-
-  if (snapshot.exists()) {
-    return snapshot.val() as Earthquake;
+  if (!snapshot.exists()) {
+    return [];
   }
 
-  return null;
+  return Object.values(snapshot.val() as Record<string, Earthquake>);
 }

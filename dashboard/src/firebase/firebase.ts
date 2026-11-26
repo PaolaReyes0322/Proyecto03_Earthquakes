@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB_HDdNjCB9oFt4JRTwdwdratNPMKK5ohE',
-  authDomain: 'data-earthquake.firebaseapp.com',
-  databaseURL: '<PEGA-AQUI-LA-URL-DE-TU-REALTIME-DATABASE>',
-  projectId: 'data-earthquake',
-  storageBucket: 'data-earthquake.firebasestorage.app',
-  messagingSenderId: '728358213842',
-  appId: '1:728358213842:web:d8e99c100ca94730edb50b',
+  apiKey: 'AIzaSyClZTN13IY1K-Ic-kMKAg2Z9GHaKFYS59k',
+  authDomain: 'data-earthqueake.firebaseapp.com',
+  databaseURL: 'https://data-earthqueake-default-rtdb.firebaseio.com',
+  projectId: 'data-earthqueake',
+  storageBucket: 'data-earthqueake.firebasestorage.app',
+  messagingSenderId: '166342256761',
+  appId: '1:166342256761:web:878ae1244028d126984ca8',
 };
 
 const app = initializeApp(firebaseConfig);
